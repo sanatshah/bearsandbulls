@@ -3,7 +3,7 @@
 /api/.env
 
 # dependencies
-./node_modules
+/node_modules
 /apps/provider/node_modules
 /apps/shared/node_modules
 /.pnp
