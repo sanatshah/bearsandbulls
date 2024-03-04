@@ -8,11 +8,12 @@ export const EmptyGuess = () => {
       <div
         style={{
           display: 'flex',
-          height: '100px',
-          width: '100px',
+          height: '50px',
+          width: '50px',
           paddingRight: '4px',
-          borderRadius: '50%',
-          border: '3px solid white'
+          borderRadius: '20%',
+          border: '3px dashed black',
+          marginRight: '10px'
         }}
       />
     ))}

@@ -6,9 +6,18 @@ import { Container } from "./Container"
 export const Initial = () => {
   return {
     image: (
-      <Container>
-        <h2>bearsAndBulls</h2>
-      </Container>
+      <div
+        style={{
+          display: 'flex',
+          position: 'relative',
+          backgroundColor: "#f7eac7"
+        }}
+      >
+        <img src="https://i.imgur.com/seVVRMB.jpeg" width="1200px" height="800px" style={{ objectFit: 'contain'}} />
+        <p style={{ position: 'absolute', color: 'black', top: '30px', left: '100px', fontSize: '60px', fontWeight: '700'}}>
+          <strong>Bears & Bulls</strong>
+        </p>
+      </div>
     ),
     intents: [
     <Button value={Actions.START}>Start</Button>,

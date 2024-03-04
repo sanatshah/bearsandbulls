@@ -23,8 +23,8 @@ export const Game = (userGuesses: UserGuesses[] | undefined) => {
       </Container>
     ),
     intents: [
-      <TextInput placeholder="Enter your guess..." />,
-      <Button value={Actions.CLEAR}>Clear</Button>,
+      <TextInput placeholder={userGuesses && userGuesses?.length === 6 ? "Enter your last guess" : "Enter your guess..." } />,
+      <Button value={Actions.HOW_TO_PLAY}>How to play</Button>,
       <Button value={Actions.SUBMIT}>Submit</Button>,
     ]
   })

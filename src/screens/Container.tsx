@@ -6,7 +6,7 @@ export const Container = ({
   children: any
 }) => {
   return (
-    <div style={{ color: 'white', display: 'flex', fontSize: 60 }}>
+    <div style={{ color: 'white', display: 'flex', fontSize: 60, backgroundColor: '#f7eac7' }}>
       <div
         style={{
           display: 'flex',

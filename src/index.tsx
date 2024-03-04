@@ -19,20 +19,20 @@ export interface UserGuesses {
 
 interface DataStore {
   userGuesses: { [ fid: string] : UserGuesses[] }  | undefined
-  challenge: number | undefined
+  challenge: number
 }
 
 export const dataStore: DataStore = {
   userGuesses: undefined,
-  challenge: undefined
+  challenge: Math.ceil(Math.random() * 10000)
 }
 
 export const initFrameServer = () => {
   dataStore.userGuesses = {}
-  dataStore.challenge = Math.ceil(Math.random() * 10000)
 }
 
 app.frame('/', (c) => {
+  console.log("challenge: ", dataStore.challenge)
   const { buttonValue, inputText, status } = c
   const { frameData, verified } = c 
   const fid = frameData?.fid
@@ -53,17 +53,13 @@ app.frame('/', (c) => {
 
       const userGuesses = getUserGuesses(fid)
 
-      console.log("userGuess: ", userGuesses)
-
       switch (buttonValue) {
         case Actions.START:
           return c.res(Game([]))
 
         case Actions.SUBMIT:
           const parsedGuess = validateGuess(inputText)
-          console.log("parsedGuess", parsedGuess)
           recordUserGuess(fid, parsedGuess)
-          console.log("userGuesses: ", userGuesses)
           return c.res(Game(userGuesses))
 
         case Actions.HOW_TO_PLAY:
