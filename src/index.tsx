@@ -1,47 +1,35 @@
 import { serve } from '@hono/node-server'
 import { Button, Frog, TextInput } from 'frog'
 import { HowToPlay } from './screens/HowToPlay'
-import { Home } from './screens/Game'
+import { Game } from './screens/Game'
+import { Actions, getUserGuesses, recordUserGuess, validateGuess } from './data'
+import { Container } from './screens/Container'
+import { Initial } from './screens/Initial'
 
 export const app = new Frog({
   // Supply a Hub API URL to enable frame verification.
   // hubApiUrl: 'https://api.hub.wevm.dev',
 })
 
-const generatedNumber = Math.ceil(Math.random() * 10000)
-
-export enum Actions {
-  BACK = 'BACK',
-  CLEAR = 'CLEAR',
-  SUBMIT = 'SUBMIT',
-  HOW_TO_PLAY = 'HOW_TO_PLAY'
+export interface UserGuesses {
+  guess: number
+  bulls?: number
+  bears?: number
 }
 
-const userGuesses: { [ fid: string] : number[] } = {}
-
-const validateGuess: (guess?:string) => number = (guess) => {
-
-  if (!guess) {
-    throw new Error("No answer provided")
-  }
-
-  if (guess.length !== 4) {
-    throw new Error("Must be 4 characters")
-  }
-
-  return parseInt(guess)
+interface DataStore {
+  userGuesses: { [ fid: string] : UserGuesses[] }  | undefined
+  challenge: number | undefined
 }
 
-const recordUserGuess = (fid: number, guess: number) => {
-  if (userGuesses[fid]) {
-    userGuesses[fid].push(guess)
-  } else {
-    userGuesses[fid] = [guess]
-  }
+export const dataStore: DataStore = {
+  userGuesses: undefined,
+  challenge: undefined
 }
 
-const getUserGuesses = (fid: number) => {
-  return userGuesses[fid]
+export const initFrameServer = () => {
+  dataStore.userGuesses = {}
+  dataStore.challenge = Math.ceil(Math.random() * 10000)
 }
 
 app.frame('/', (c) => {
@@ -52,45 +40,66 @@ app.frame('/', (c) => {
   try {
     if (status === 'response') {
 
+      if (!fid) {
+        return c.res({
+          image: (
+            <Container>
+              <h2>Error</h2> 
+            </Container>
+          ),
+          intents: []
+        })
+      }
+
+      const userGuesses = getUserGuesses(fid)
+
+      console.log("userGuess: ", userGuesses)
+
       switch (buttonValue) {
+        case Actions.START:
+          return c.res(Game([]))
+
         case Actions.SUBMIT:
           const parsedGuess = validateGuess(inputText)
-          console.log("parsedGuess: ", parsedGuess)
-          if (fid) {
-            recordUserGuess(fid, parsedGuess)
-            return c.res(Home(getUserGuesses(fid)))
-          }
-          break;
+          console.log("parsedGuess", parsedGuess)
+          recordUserGuess(fid, parsedGuess)
+          console.log("userGuesses: ", userGuesses)
+          return c.res(Game(userGuesses))
 
         case Actions.HOW_TO_PLAY:
           return c.res(HowToPlay())
 
         case Actions.BACK:
-          if (fid) {
-            return c.res(Home(getUserGuesses(fid)))
-          }
+          return c.res(Initial())
 
         case Actions.CLEAR:
-          if (fid) {
-            return c.res(Home(getUserGuesses(fid)))
-          }
-
+          return c.res(Game(userGuesses))
       }
 
+      return c.res({
+        image: <h2>Error</h2>, 
+        intents: []
+      })
+
+    } else if (status === 'initial') {
+      return c.res(Initial())
     }
+
   } catch (e) {}
 
-  if (status === 'initial') {
-    return c.res(Home([]))
-  } 
-
-  return c.res(Home([]))
+  return c.res({
+    image: <h2>Error</h2>,
+    intents: []
+  })
 })
 
 const port = 3000
 console.log(`Server is running on port ${port}`)
 
+initFrameServer()
 serve({
   fetch: app.fetch,
   port,
 })
+export { Actions }
+
