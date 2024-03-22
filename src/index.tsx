@@ -8,7 +8,7 @@ import { Initial } from './screens/Initial'
 
 export const app = new Frog({
   // Supply a Hub API URL to enable frame verification.
-  // hubApiUrl: 'https://api.hub.wevm.dev',
+  //hubApiUrl: 'https://api.hub.wevm.dev',
 })
 
 export interface UserGuesses {

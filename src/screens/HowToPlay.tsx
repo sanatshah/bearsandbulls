@@ -7,17 +7,15 @@ export const HowToPlay = () => {
 
   return ({
     image: (
-      <Container>
-        <div
-          style={{
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center'
-          }}
-        >
-          instructions here
-        </div>
-      </Container>
+      <div
+        style={{
+          display: 'flex',
+          position: 'relative',
+          backgroundColor: "#f7eac7"
+        }}
+      >
+        <img src="https://i.imgur.com/YjhuBLs.png" width="1200px" height="800px" style={{ objectFit: 'contain'}} />
+      </div>
     ),
     intents: [
       <Button value={Actions.BACK}>Back</Button>,
