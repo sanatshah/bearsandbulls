@@ -2,7 +2,7 @@ import { serve } from '@hono/node-server'
 import { Frog} from 'frog'
 import { HowToPlay } from './screens/HowToPlay.js'
 import { Game } from './screens/Game.js'
-import { Actions, getUserGuesses, recordUserGuess, validateGuess } from './data/index.js'
+import { Actions, checkIfWon, getUserGuesses, recordUserGuess, validateGuess } from './data/index.js'
 import { Initial } from './screens/Initial.js'
 import { handle } from 'frog/vercel'
 
@@ -10,11 +10,11 @@ import { handle } from 'frog/vercel'
 import { devtools } from 'frog/dev'
 import { serveStatic } from 'frog/serve-static'
 */
-import { Winning } from './screens/Winning'
-import { Losing } from './screens/Losing'
+import { Winning } from './screens/Winning.js'
+import { Losing } from './screens/Losing.js'
 
 export const app = new Frog({
-  hubApiUrl: 'https://api.hub.wevm.dev',
+  //hubApiUrl: 'https://api.hub.wevm.dev',
 })
 
 export interface UserGuesses {
@@ -37,6 +37,8 @@ export const initFrameServer = () => {
   dataStore.userGuesses = {}
 }
 
+const MAX_GUESS_COUNT = 6
+
 app.frame('/', (c) => {
   console.log("challenge: ", dataStore.challenge)
   const { buttonValue, inputText, status } = c
@@ -54,35 +56,33 @@ app.frame('/', (c) => {
       }
 
       const userGuesses = getUserGuesses(fid)
-      const currentUserGuessCount = userGuesses?.length ?? 0
+      let currentUserGuessCount = userGuesses?.length ?? 0
 
       switch (buttonValue) {
         case Actions.START:
-          return c.res(Game([]))
+          return c.res(Game(userGuesses))
 
         case Actions.SUBMIT:
-          // check how many guesses has happened
-          // if < 5 has happened, validate, record, potentially give winning screen
-          // if 5 has happened, validate, record, potentially give winning or losing screen
-
-          const wonTheGame = checkIfWon(userGuesses)
+          const wonTheGame = userGuesses ? checkIfWon(userGuesses) : false
 
           if (wonTheGame) {
-            return c.res(Winning)
+            return c.res(Winning())
           }
 
-          if (currentUserGuessCount > 6) {
-            return c.res(Losing)
+          if (currentUserGuessCount > MAX_GUESS_COUNT) {
+            return c.res(Losing())
           }
 
           const parsedGuess = validateGuess(inputText)
           const isWinningGuess = recordUserGuess(fid, parsedGuess)
+
+          currentUserGuessCount++
       
           if (isWinningGuess) {
-            return c.res(Winning)
+            return c.res(Winning())
           } else {
-            if (currentUserGuessCount === 5) {
-              return c.res(Losing)
+            if (currentUserGuessCount === MAX_GUESS_COUNT) {
+              return c.res(Losing())
             } else {
               return c.res(Game(userGuesses))
             }
@@ -132,8 +132,3 @@ serve({
   port,
 })
 export { Actions }
-
-function checkIfWon(userGuesses: UserGuesses[] | undefined) {
-  throw new Error('Function not implemented.')
-}
-

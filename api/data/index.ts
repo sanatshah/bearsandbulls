@@ -1,4 +1,4 @@
-import { dataStore } from "../index.js"
+import { UserGuesses, dataStore } from "../index.js"
 
 export enum Actions {
   START = 'START',
@@ -21,48 +21,43 @@ export const validateGuess: (guess?:string) => number = (guess) => {
   return parseInt(guess)
 }
 
-const getBullsAndBearsFromGuess = (guess: number, challenge: number) => {
-  /**
-   * 
-   * challenge = 2935
-   * guess = 1221
-   * 
-   * bulls = 0
-   * bears = 1
-   * 
-   * 
-   * 
-   */
+const getBullsAndBearsFromGuess = (challenge: number, guess: number) => {
 
-  const guessArray = Array.from(guess.toString())
+
   const challengeArray = Array.from(challenge.toString())
+  const guessArray = Array.from(guess.toString())
 
   let bulls = 0;
   let bears = 0;
-  let guessTrack = [ false, false, false, false]
+  let challengeGuessTracker = [ false, false, false, false]
+  let userGuessTracker = [ false, false, false, false]
 
+  // find bulls
   guessArray.forEach((value, index) => {
-    if (!guessTrack[index]) {
-      return
-    }
-
     if (challengeArray[index] === value) {
       bulls++
-      guessTrack[index] = true
+      challengeGuessTracker[index] = true
+      userGuessTracker[index] = true
     }   
   })
 
-  guessArray.forEach((value, index) => {
-    if (!guessTrack[index]) {
+  // find bears
+  guessArray.forEach((value, guessIndex) => {
+
+    if (userGuessTracker[guessIndex]) {
       return
     }
 
-    const challengeIndex = challengeArray.findIndex(challengeValue => challengeValue === value)
 
-    if (challengeIndex) {
+    // See if there is someone in the challenge that has the number
+    const challengeIndex = challengeArray.findIndex((challengeValue, index) => {  
+      return (challengeValue === value && (!challengeGuessTracker[index] && !userGuessTracker[guessIndex]))
+    } )
+
+    if (challengeIndex !== -1) {
       bears++;
-      guessTrack[challengeIndex] = true
-
+      userGuessTracker[guessIndex] = true
+      challengeGuessTracker[challengeIndex] = true
     }
   })
 
@@ -86,17 +81,13 @@ export const recordUserGuess = (fid: number, guess: number): boolean => {
     bears
   }
 
-  console.log("new GUess obj: ", newGuessObj)
-
   if (dataStore.userGuesses[fid]) {
     dataStore.userGuesses[fid].push(newGuessObj)
   } else {
     dataStore.userGuesses[fid] = [newGuessObj]
   }
 
-  // check if this is a winning guess, return true or false
-  
-  return false
+  return checkIfWon(dataStore.userGuesses[fid])
 }
 
 export const getUserGuesses = (fid: number) => {
@@ -105,4 +96,8 @@ export const getUserGuesses = (fid: number) => {
   }
 
   return dataStore.userGuesses[fid]
+}
+
+export const checkIfWon = (guesses: UserGuesses[]): boolean => {
+  return guesses[guesses.length].bulls === 4
 }
