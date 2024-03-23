@@ -41,6 +41,19 @@ export const initFrameServer = () => {
 
 const MAX_GUESS_COUNT = 6
 
+const checkIfWonOrLost = (c: any, userGuesses: UserGuesses[], currentUserGuessCount: number) => {
+  const wonTheGame = userGuesses ? checkIfWon(userGuesses) : false
+
+  if (wonTheGame) {
+    return c.res(Winning())
+  }
+
+    console.log("current", currentUserGuessCount)
+  if (currentUserGuessCount >= MAX_GUESS_COUNT) {
+    return c.res(Losing())
+  }
+}
+
 app.frame('/', (c) => {
   console.log("challenge: ", dataStore.challenge)
   const { buttonValue, inputText, status } = c
@@ -62,18 +75,17 @@ app.frame('/', (c) => {
 
       switch (buttonValue) {
         case Actions.START:
+          const endScreen = checkIfWonOrLost(c, userGuesses, currentUserGuessCount)
+          if (endScreen) {
+            return checkIfWonOrLost(c, userGuesses, currentUserGuessCount)
+          }
           return c.res(Game(userGuesses))
 
         case Actions.SUBMIT:
           try {
-            const wonTheGame = userGuesses ? checkIfWon(userGuesses) : false
-
-            if (wonTheGame) {
-              return c.res(Winning())
-            }
-
-            if (currentUserGuessCount >= MAX_GUESS_COUNT) {
-              return c.res(Losing())
+            const endScreen = checkIfWonOrLost(c, userGuesses, currentUserGuessCount)
+            if (endScreen) {
+              return checkIfWonOrLost(c, userGuesses, currentUserGuessCount)
             }
 
             const parsedGuess = validateGuess(inputText)
@@ -95,7 +107,6 @@ app.frame('/', (c) => {
             return c.res(Initial())
           }
           
-
         case Actions.HOW_TO_PLAY:
           return c.res(HowToPlay())
 
