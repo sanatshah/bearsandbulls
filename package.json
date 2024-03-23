@@ -6,7 +6,7 @@
     "build": "frog vercel-build",
     "deploy:dev": "vercel",
     "deploy:prod": "vercel --prod",
-    "dev": "frog dev",
+    "dev": "frog dev"
   },
   "dependencies": {
     "@hono/node-server": "^1",
