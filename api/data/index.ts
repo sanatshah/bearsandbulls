@@ -99,5 +99,9 @@ export const getUserGuesses = (fid: number) => {
 }
 
 export const checkIfWon = (guesses: UserGuesses[]): boolean => {
-  return guesses[guesses.length].bulls === 4
+  if (guesses.length === 0) {
+    return false
+  }
+
+  return guesses[guesses.length - 1].bulls === 4
 }

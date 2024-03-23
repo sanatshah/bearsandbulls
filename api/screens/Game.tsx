@@ -3,6 +3,7 @@ import { Actions } from '../data/index.js'
 import { UserGuesses } from '../index.js'
 import { EmptyGuess } from './EmptyGuess.js'
 import { Guesses } from './Guesses.js'
+import { Container } from './Container.js'
 
 
 export const Game = (userGuesses: UserGuesses[] | undefined) => {
@@ -16,7 +17,11 @@ export const Game = (userGuesses: UserGuesses[] | undefined) => {
   }
 
   return ({
-    image: '',
+    image: (
+      <Container>
+        {screenToRender ?? <h2>Game Error</h2>}
+      </Container>
+    ),
     intents: [
       <TextInput placeholder={userGuesses && userGuesses?.length === 6 ? "Enter your last guess" : "Enter your guess..." } />,
       <Button value={Actions.HOW_TO_PLAY}>How to play</Button>,

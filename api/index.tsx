@@ -55,38 +55,46 @@ app.frame('/', (c) => {
         })
       }
 
-      const userGuesses = getUserGuesses(fid)
+      const userGuesses = getUserGuesses(fid) ?? []
       let currentUserGuessCount = userGuesses?.length ?? 0
+      console.log("userGuesses: ", userGuesses)
 
       switch (buttonValue) {
         case Actions.START:
           return c.res(Game(userGuesses))
 
         case Actions.SUBMIT:
-          const wonTheGame = userGuesses ? checkIfWon(userGuesses) : false
+          try {
+            const wonTheGame = userGuesses ? checkIfWon(userGuesses) : false
 
-          if (wonTheGame) {
-            return c.res(Winning())
-          }
-
-          if (currentUserGuessCount > MAX_GUESS_COUNT) {
-            return c.res(Losing())
-          }
-
-          const parsedGuess = validateGuess(inputText)
-          const isWinningGuess = recordUserGuess(fid, parsedGuess)
-
-          currentUserGuessCount++
-      
-          if (isWinningGuess) {
-            return c.res(Winning())
-          } else {
-            if (currentUserGuessCount === MAX_GUESS_COUNT) {
-              return c.res(Losing())
-            } else {
-              return c.res(Game(userGuesses))
+            if (wonTheGame) {
+              return c.res(Winning())
             }
+
+            if (currentUserGuessCount > MAX_GUESS_COUNT) {
+              return c.res(Losing())
+            }
+
+            const parsedGuess = validateGuess(inputText)
+            const isWinningGuess = recordUserGuess(fid, parsedGuess)
+
+            currentUserGuessCount++
+        
+            if (isWinningGuess) {
+              return c.res(Winning())
+            } else {
+              if (currentUserGuessCount === MAX_GUESS_COUNT) {
+                return c.res(Losing())
+              } else {
+                return c.res(Game(userGuesses))
+              }
+            }
+
+          } catch (e) {
+            console.log("e: ", e)
+            return c.res(Initial())
           }
+          
 
         case Actions.HOW_TO_PLAY:
           return c.res(HowToPlay())
