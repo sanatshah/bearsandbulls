@@ -3,7 +3,6 @@ import { Frog} from 'frog'
 import { HowToPlay } from './screens/HowToPlay.js'
 import { Game } from './screens/Game.js'
 import { Actions, getUserGuesses, recordUserGuess, validateGuess } from './data/index.js'
-import { Container } from './screens/Container.js'
 import { Initial } from './screens/Initial.js'
 import { handle } from 'frog/vercel'
 
@@ -13,8 +12,7 @@ import { serveStatic } from 'frog/serve-static'
 */
 
 export const app = new Frog({
-  // Supply a Hub API URL to enable frame verification.
-  //hubApiUrl: 'https://api.hub.wevm.dev',
+  hubApiUrl: 'https://api.hub.wevm.dev',
 })
 
 export interface UserGuesses {
@@ -48,11 +46,7 @@ app.frame('/', (c) => {
 
       if (!fid) {
         return c.res({
-          image: (
-            <Container>
-              <h2>Error</h2> 
-            </Container>
-          ),
+          image: '',
           intents: []
         })
       }
@@ -79,7 +73,7 @@ app.frame('/', (c) => {
       }
 
       return c.res({
-        image: <h2>Error</h2>, 
+        image: '', 
         intents: []
       })
 
@@ -90,7 +84,7 @@ app.frame('/', (c) => {
   } catch (e) {}
 
   return c.res({
-    image: <h2>Error</h2>,
+    image: '',
     intents: []
   })
 })
