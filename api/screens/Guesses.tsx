@@ -47,7 +47,7 @@ export const Guesses = ({
                   paddingTop: '0'
                 }}
               >
-                <p style={{fontSize: '40px', color: 'black'}}>{bulls} 🐂 &nbsp;&nbsp; {bears} 🐻</p>
+                <p style={{fontSize: '40px', color: 'black'}}>{bulls?.toString()} 🐂 &nbsp;&nbsp; {bears?.toString()} 🐻</p>
               </div>
               <div
               style={{

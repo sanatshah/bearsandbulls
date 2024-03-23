@@ -1,7 +1,6 @@
-import { serve } from '@hono/node-server'
-import { Button, Frog, TextInput } from 'frog'
-import { Actions } from '..'
-import { Container } from './Container'
+import { Button } from 'frog'
+import { Actions } from '../index.js'
+import { Container } from './Container.js'
 
 export const Losing = () => {
 
@@ -14,7 +13,7 @@ export const Losing = () => {
           backgroundColor: "#FAE9CB"
         }}
       >
-        <img src="https://imgur.com/wurZpjT" width="1200px" height="800px" style={{ objectFit: 'contain'}} />
+        <img src="https://i.imgur.com/wurZpjT.png" width="1200px" height="800px" style={{ objectFit: 'contain'}} />
       </div>
     ),
     intents: [

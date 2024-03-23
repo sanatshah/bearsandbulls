@@ -68,9 +68,12 @@ const getBullsAndBearsFromGuess = (challenge: number, guess: number) => {
 }
 
 
-export const recordUserGuess = (fid: number, guess: number): boolean => {
+export const recordUserGuess = (fid: number, guess: number): {
+  isWinningGuess: boolean,
+  updatedUserGuesses: UserGuesses[]
+} => {
   if (!dataStore.userGuesses) {
-    return false
+    throw new Error("Error")
   }
 
   const { bulls, bears } = getBullsAndBearsFromGuess(guess, dataStore.challenge)
@@ -87,7 +90,10 @@ export const recordUserGuess = (fid: number, guess: number): boolean => {
     dataStore.userGuesses[fid] = [newGuessObj]
   }
 
-  return checkIfWon(dataStore.userGuesses[fid])
+  return {
+    isWinningGuess: checkIfWon(dataStore.userGuesses[fid]),
+    updatedUserGuesses: dataStore.userGuesses[fid]
+  }
 }
 
 export const getUserGuesses = (fid: number) => {

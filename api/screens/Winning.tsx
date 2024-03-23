@@ -12,7 +12,7 @@ export const Winning = () => {
           backgroundColor: "#FAE9CB"
         }}
       >
-        <img src="https://imgur.com/It7sK9R" width="1200px" height="800px" style={{ objectFit: 'contain'}} />
+        <img src="https://i.imgur.com/It7sK9R.png" width="1200px" height="800px" style={{ objectFit: 'contain'}} />
       </div>
     ),
     intents: [

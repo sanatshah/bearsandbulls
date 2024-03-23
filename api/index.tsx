@@ -12,6 +12,8 @@ import { serveStatic } from 'frog/serve-static'
 */
 import { Winning } from './screens/Winning.js'
 import { Losing } from './screens/Losing.js'
+import { devtools } from 'frog/dev'
+import { serveStatic } from 'frog/serve-static'
 
 export const app = new Frog({
   //hubApiUrl: 'https://api.hub.wevm.dev',
@@ -57,7 +59,6 @@ app.frame('/', (c) => {
 
       const userGuesses = getUserGuesses(fid) ?? []
       let currentUserGuessCount = userGuesses?.length ?? 0
-      console.log("userGuesses: ", userGuesses)
 
       switch (buttonValue) {
         case Actions.START:
@@ -71,27 +72,26 @@ app.frame('/', (c) => {
               return c.res(Winning())
             }
 
-            if (currentUserGuessCount > MAX_GUESS_COUNT) {
+            if (currentUserGuessCount >= MAX_GUESS_COUNT) {
               return c.res(Losing())
             }
 
             const parsedGuess = validateGuess(inputText)
-            const isWinningGuess = recordUserGuess(fid, parsedGuess)
+            const { isWinningGuess, updatedUserGuesses } = recordUserGuess(fid, parsedGuess)
 
             currentUserGuessCount++
-        
+
             if (isWinningGuess) {
               return c.res(Winning())
             } else {
               if (currentUserGuessCount === MAX_GUESS_COUNT) {
                 return c.res(Losing())
               } else {
-                return c.res(Game(userGuesses))
+                return c.res(Game(updatedUserGuesses))
               }
             }
 
           } catch (e) {
-            console.log("e: ", e)
             return c.res(Initial())
           }
           
@@ -139,4 +139,5 @@ serve({
   fetch: app.fetch,
   port,
 })
+devtools(app, { serveStatic })
 export { Actions }
