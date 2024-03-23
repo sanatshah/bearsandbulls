@@ -10,6 +10,8 @@ import { handle } from 'frog/vercel'
 import { devtools } from 'frog/dev'
 import { serveStatic } from 'frog/serve-static'
 */
+import { Winning } from './screens/Winning'
+import { Losing } from './screens/Losing'
 
 export const app = new Frog({
   hubApiUrl: 'https://api.hub.wevm.dev',
@@ -52,15 +54,39 @@ app.frame('/', (c) => {
       }
 
       const userGuesses = getUserGuesses(fid)
+      const currentUserGuessCount = userGuesses?.length ?? 0
 
       switch (buttonValue) {
         case Actions.START:
           return c.res(Game([]))
 
         case Actions.SUBMIT:
+          // check how many guesses has happened
+          // if < 5 has happened, validate, record, potentially give winning screen
+          // if 5 has happened, validate, record, potentially give winning or losing screen
+
+          const wonTheGame = checkIfWon(userGuesses)
+
+          if (wonTheGame) {
+            return c.res(Winning)
+          }
+
+          if (currentUserGuessCount > 6) {
+            return c.res(Losing)
+          }
+
           const parsedGuess = validateGuess(inputText)
-          recordUserGuess(fid, parsedGuess)
-          return c.res(Game(userGuesses))
+          const isWinningGuess = recordUserGuess(fid, parsedGuess)
+      
+          if (isWinningGuess) {
+            return c.res(Winning)
+          } else {
+            if (currentUserGuessCount === 5) {
+              return c.res(Losing)
+            } else {
+              return c.res(Game(userGuesses))
+            }
+          }
 
         case Actions.HOW_TO_PLAY:
           return c.res(HowToPlay())
@@ -106,4 +132,8 @@ serve({
   port,
 })
 export { Actions }
+
+function checkIfWon(userGuesses: UserGuesses[] | undefined) {
+  throw new Error('Function not implemented.')
+}
 

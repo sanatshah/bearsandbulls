@@ -73,9 +73,9 @@ const getBullsAndBearsFromGuess = (guess: number, challenge: number) => {
 }
 
 
-export const recordUserGuess = (fid: number, guess: number) => {
+export const recordUserGuess = (fid: number, guess: number): boolean => {
   if (!dataStore.userGuesses) {
-    return
+    return false
   }
 
   const { bulls, bears } = getBullsAndBearsFromGuess(guess, dataStore.challenge)
@@ -89,13 +89,14 @@ export const recordUserGuess = (fid: number, guess: number) => {
   console.log("new GUess obj: ", newGuessObj)
 
   if (dataStore.userGuesses[fid]) {
-    if (dataStore.userGuesses[fid].find((previousGuess) => previousGuess.guess === guess)) {
-      return
-    }
     dataStore.userGuesses[fid].push(newGuessObj)
   } else {
     dataStore.userGuesses[fid] = [newGuessObj]
   }
+
+  // check if this is a winning guess, return true or false
+  
+  return false
 }
 
 export const getUserGuesses = (fid: number) => {

@@ -9,7 +9,7 @@ export const HowToPlay = () => {
         style={{
           display: 'flex',
           position: 'relative',
-          backgroundColor: "#f7eac7"
+          backgroundColor: "#FAE9CB"
         }}
       >
         <img src="https://i.imgur.com/YjhuBLs.png" width="1200px" height="800px" style={{ objectFit: 'contain'}} />
