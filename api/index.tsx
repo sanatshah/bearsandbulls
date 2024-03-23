@@ -5,6 +5,12 @@ import { Game } from './screens/Game'
 import { Actions, getUserGuesses, recordUserGuess, validateGuess } from './data'
 import { Container } from './screens/Container'
 import { Initial } from './screens/Initial'
+import { handle } from 'frog/vercel'
+
+/*
+import { devtools } from 'frog/dev'
+import { serveStatic } from 'frog/serve-static'
+*/
 
 export const app = new Frog({
   // Supply a Hub API URL to enable frame verification.
@@ -88,6 +94,14 @@ app.frame('/', (c) => {
     intents: []
   })
 })
+
+/*
+if (((import.meta as any).env as any)?.MODE === 'development') devtools(app, { serveStatic } as any)
+else devtools(app, { assetsPath: '/.frog' })
+*/
+
+export const GET = handle(app)
+export const POST = handle(app)
 
 const port = 3000
 console.log(`Server is running on port ${port}`)
