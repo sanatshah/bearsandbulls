@@ -1,4 +1,4 @@
-import { dataStore } from ".."
+import { dataStore } from "../index.js"
 
 export enum Actions {
   START = 'START',

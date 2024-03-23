@@ -1,9 +1,9 @@
-import { Button, Frog, TextInput } from 'frog'
-import { Actions } from '../data'
-import { UserGuesses } from '..'
-import { EmptyGuess } from './EmptyGuess'
-import { Guesses } from './Guesses'
-import { Container } from './Container'
+import { Button, TextInput } from 'frog'
+import { Actions } from '../data/index.js'
+import { UserGuesses } from '../index.js'
+import { EmptyGuess } from './EmptyGuess.js'
+import { Guesses } from './Guesses.js'
+import { Container } from './Container.js'
 
 
 export const Game = (userGuesses: UserGuesses[] | undefined) => {

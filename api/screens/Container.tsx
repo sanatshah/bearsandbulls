@@ -1,5 +1,3 @@
-import { jsx } from "hono/jsx"
-
 export const Container = ({
   children
 }: {

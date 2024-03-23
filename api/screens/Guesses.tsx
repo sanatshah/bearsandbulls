@@ -1,5 +1,5 @@
-import { UserGuesses } from ".."
-import { EmptyGuess } from "./EmptyGuess"
+import { UserGuesses } from "../index.js"
+import { EmptyGuess } from "./EmptyGuess.js"
 
 
 export const Guesses = ({

@@ -1,6 +1,5 @@
 import { Button } from "frog"
-import { Actions } from ".."
-import { Container } from "./Container"
+import { Actions } from "../index.js"
 
 
 export const Initial = () => {

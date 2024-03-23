@@ -1,10 +1,10 @@
 import { serve } from '@hono/node-server'
-import { Button, Frog, TextInput } from 'frog'
-import { HowToPlay } from './screens/HowToPlay'
-import { Game } from './screens/Game'
-import { Actions, getUserGuesses, recordUserGuess, validateGuess } from './data'
-import { Container } from './screens/Container'
-import { Initial } from './screens/Initial'
+import { Frog} from 'frog'
+import { HowToPlay } from './screens/HowToPlay.js'
+import { Game } from './screens/Game.js'
+import { Actions, getUserGuesses, recordUserGuess, validateGuess } from './data/index.js'
+import { Container } from './screens/Container.js'
+import { Initial } from './screens/Initial.js'
 import { handle } from 'frog/vercel'
 
 /*
@@ -40,7 +40,7 @@ export const initFrameServer = () => {
 app.frame('/', (c) => {
   console.log("challenge: ", dataStore.challenge)
   const { buttonValue, inputText, status } = c
-  const { frameData, verified } = c 
+  const { frameData } = c 
   const fid = frameData?.fid
 
   try {
