@@ -1,6 +1,5 @@
 import { Button } from 'frog'
 import { Actions } from '../index.js'
-import { Container } from './Container.js'
 
 export const Losing = () => {
 
