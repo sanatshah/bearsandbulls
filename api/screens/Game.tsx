@@ -1,6 +1,6 @@
 import { Button, TextInput } from 'frog'
 import { Actions } from '../data/index.js'
-import { UserGuesses } from '../index.js'
+import { UserGuesses } from '../oldindex.js'
 import { EmptyGuess } from './EmptyGuess.js'
 import { Guesses } from './Guesses.js'
 import { Container } from './Container.js'

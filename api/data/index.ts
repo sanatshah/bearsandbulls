@@ -1,4 +1,4 @@
-import { UserGuesses, dataStore } from "../index.js"
+import { UserGuesses, dataStore } from "../oldindex.js"
 
 export enum Actions {
   START = 'START',

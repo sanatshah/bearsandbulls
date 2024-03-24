@@ -1,5 +1,5 @@
 import { Button } from 'frog'
-import { Actions } from '../index.js'
+import { Actions } from '../oldindex.js'
 
 export const Winning = () => {
 

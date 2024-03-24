@@ -1,4 +1,4 @@
-import { UserGuesses } from "../index.js"
+import { UserGuesses } from "../oldindex.js"
 import { EmptyGuess } from "./EmptyGuess.js"
 
 
