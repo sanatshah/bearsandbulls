@@ -374,7 +374,8 @@ export const Container = ({
   )
 }
 export const app = new Frog({
-  //hubApiUrl: 'https://api.hub.wevm.dev',
+  hubApiUrl: 'https://api.hub.wevm.dev',
+  basePath: '/api',
 })
 
 export interface UserGuesses {
