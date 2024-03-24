@@ -48,14 +48,12 @@ const checkIfWonOrLost = (c: any, userGuesses: UserGuesses[], currentUserGuessCo
     return c.res(Winning())
   }
 
-    console.log("current", currentUserGuessCount)
   if (currentUserGuessCount >= MAX_GUESS_COUNT) {
     return c.res(Losing())
   }
 }
 
 app.frame('/', (c) => {
-  console.log("challenge: ", dataStore.challenge)
   const { buttonValue, inputText, status } = c
   const { frameData } = c 
   const fid = frameData?.fid
